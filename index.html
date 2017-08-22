@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Zoom</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="//code.angularjs.org/snapshot/angular.min.js"></script>
+        <script src="//code.angularjs.org/snapshot/angular-animate.js"></script>
+        <style>
+            
+            /*Base class to hold all small images. This class stays inside the bootstrap col-md- classes*/
+            .zoom-out {
+                transition:all linear 0.5s;
+                width: 100%;
+                opacity: 1;
+            }
+
+            /*The class to hold the big magnified image.*/
+            .zoom-in {
+                transition:all linear 0.5s;
+                width: 60%;
+                position: absolute;
+                margin: auto; /* TO CENTER THE IMAGE */
+                z-index: 1;
+                top: 0; /* FROM THE TOP OF THE IMAGE (NO PADDING AT THE TOP)*/
+                left: 20%;
+                opacity: 1;
+            }
+
+            /*For  fade out while zooming out*/
+            .zoom-in.ng-hide {
+                opacity: 0;
+                width: 0;
+            }
+
+            /*For gradual fade in / out while zooming in / out*/
+            .zoom-in.ng-hide-add,
+            .zoom-in.ng-hide-remove {
+                transition: all linear 0.5s;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1 style="text-align: center;">Headlines</h1>
+        <div ng-app="zoomApp" ng-controller='zoomCtrl'>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12" style="max-height: 1px; overflow: visible;">
+                        <img src="{{zoomSrc}}" alt="" ng-click="boolZoom = false" class="zoom-in" ng-show="boolZoom"/>
+                    </div>
+                </div>
+                <div class="row" ng-repeat="iR in imageRows">
+                    <div class="col-md-3" ng-repeat='img in iR'>
+                        <img src="{{'images/' + img.src}}" alt="" class="zoom-out" ng-click="clickZoom($event)"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var app = angular.module('zoomApp', ['ngAnimate']);
+            app.controller('zoomCtrl', function ($scope, $http) {
+            //To initially zoom out all the images
+            $scope.boolZoom = false;
+            //To store the src of the chosen image. Initially it
+            //is set to null
+                    $scope.zoomSrc = '';
+            //Get the src's of all images from the json file. This
+            //JSON is an array of four - element array.
+                    //Four taken as I opted for col-md-3. If it is
+                    //col - md - 4, I'd go for the inner array of 3 elements
+                    $http.get("data/images.json").then(function (response) {
+            //Storing the image src's in scope variable
+            $scope.imageRows = response.data;
+            }, function (error) {
+            alert(error.status);
+            });
+            //To handle the clicking of the image
+            $scope.clickZoom = function (evt) {
+            if (evt.target.tagName.toUpperCase() === 'IMG') {
+            $scope.zoomSrc = evt.target.src;
+            $scope.boolZoom = true;
+            }
+            };
+            });
+        </script>
+    </body>

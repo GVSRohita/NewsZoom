@@ -1,0 +1,30 @@
+[
+    [
+        {
+            "src": "newsitem1.jpg"
+        },
+        {
+            "src": "newsitem2.jpg"
+        },
+        {
+            "src": "newsitem3.jpg"
+        },
+        {
+            "src": "newsitem4.jpg"
+        }
+    ],
+    [
+        {
+            "src": "newsitem5.jpg"
+        },
+        {
+            "src": "newsitem6.jpg"
+        },
+        {
+            "src": "newsitem7.jpg"
+        },
+        {
+            "src": "newsitem8.jpg"
+        }
+    ]
+]
